@@ -1,6 +1,6 @@
 # malhala
 
-Run [Mal] on [WASM] directly in your [CLJS] repl.
+Run [Mal](https://github.com/kanaka/mal) on [WASM](https://webassembly.org/) directly in your [CLJS](https://clojurescript.org/) repl.
 
 ```
 git clone https://github.com/johnmn3/malhala.git
