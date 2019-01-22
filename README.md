@@ -5,10 +5,10 @@ Run [Mal](https://github.com/kanaka/mal) on [WASM](https://webassembly.org/) dir
 ```
 git clone https://github.com/johnmn3/malhala.git
 cd malhala
-clj -m cljs.main -co build.edn -c malhala.core -r
+clj -m cljs.main -co build.edn -ro '{:launch-browser false}' -c malhala.core -r
 ```
 
-This should open a browser. Open the browser's developer console and, within a few seconds, you should see `:mal-compiled` printed.
+Then launch your favorite browser. (only tested in Chrome so far... Safari has issues with [tau.alpha](https://github.com/johnmn3/tau.alpha) at the moment) Open the browser's developer console and, within a few seconds, you should see `:mal-compiled` printed.
 
 Then start playing at the repl:
 ```
