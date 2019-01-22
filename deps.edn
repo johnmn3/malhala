@@ -1,0 +1,4 @@
+{:paths ["src"]
+ :deps {org.clojure/clojurescript {:mvn/version "1.10.439"}
+        johnmn3/tau.alpha {:git/url "https://github.com/johnmn3/tau.alpha.git"
+                           :sha "b1b7e89e95b9b1eb0c7a7ca8c4b8c9a793d2d710"}}}

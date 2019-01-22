@@ -1,0 +1,5 @@
+{:main malhala.core
+ :output-to "out/main.js"
+ :output-dir "out"
+ :infer-externs true
+ :watch "src"}

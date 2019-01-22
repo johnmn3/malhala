@@ -1,1 +1,32 @@
 # malhala
+
+Run [Mal] on [WASM] directly in your [CLJS] repl.
+
+```
+git clone https://github.com/johnmn3/malhala.git
+cd malhala
+clj -m cljs.main -co build.edn -c malhala.core -r
+```
+
+This should open a browser. Open the browser's developer console and, within a few seconds, you should see `:mal-compiled` printed.
+
+Then start playing at the repl:
+```
+cljs.user=> (require '[malhala.core :refer [mal>]])
+nil
+cljs.user=> (mal> (+ 1 2))
+nil
+```
+In the developer console, we can see the printed results: `Error: unexpected EOF`
+
+Well, that wasn't supposed to happen. I'm still working out the kinks (PRs welcome).
+
+Let's try that last one again:
+
+```
+(mal> (+ 1 2))
+```
+
+Browser console: `3`
+
+Nice! Now go and port CLJS to WASM!!!
