@@ -1,10 +1,5 @@
 (ns malhala.two)
 
-; (def mal-env
-;   "(module))")
-
-
-
 (def mal-env
   "(module $env
 

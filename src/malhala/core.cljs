@@ -5,6 +5,7 @@
    [malhala.two :as two]
    [malhala.three :as three]
    [malhala.step :as step]
+   [malhala.mal :as mal]
    [mal-wam :as m]
    [web-assembly.Wabt :as wabt]
    [tau.alpha.core :refer [set-conf! on-screen? tauon tau]]
@@ -77,14 +78,6 @@
 (defn read-file-native [s]
   (get @files s))
 
-(defn ->u-int-8-array [buf]
-  (let [u (js/Uint8Array. (.-length buf))]
-    (doall
-      (map-indexed
-       #(aset u %1 %2)
-       (array-seq buf)))
-    u))
-
 (defn get-string [mem addr]
   (let [u8 (js/Uint8Array. (.-buffer mem) addr)
         len (.findIndex u8 #(= 0 %))
@@ -93,13 +86,16 @@
     s))
 
 (defn put-string [mem addr s max-length]
+  ; (println :put-string :addr addr :string-length (if (string? s) (count s) s) :max-length max-length)
   (let [u8 (js/Uint8Array. (.-buffer mem) addr)
         bytes (-> (js/TextEncoder. "utf8") (.encode s))
+        ; _ (println :put-string :bytes-length-before (.-length bytes))
         bytes (if (and max-length (> (.-length bytes) max-length))
                 (.slice bytes 0 max-length)
                 bytes)]
     (.set u8 bytes 0)
     (aset u8 (.-length bytes) 0)
+    ; (println :put-string :bytes-length (.-length bytes) :u8-length (.-length u8))
     (inc (.-length bytes))))
 
 (defn marshal-argv [mem offset args]
@@ -113,6 +109,7 @@
           (.setUint32 view (* i 4) @string-start true)
           (swap! string-start (partial + len))))
       args))
+    (.setUint32 view (* 4 (.-length args)) 0 true)
     (+ @string-start offset)))
 
 (defn printline [mem addr stream]
@@ -122,28 +119,41 @@
 
 (def t (tauon))
 
-(defn read-line []
+(defn read-line-sync []
+  ; (println :id tau.alpha.state/id)
   (let [atau @tau-container
         _ (swap! atau assoc :waiting true)
-        res (-> atau wait :res)]
+        res (if-not (on-screen?) (-> atau wait :res))]
     (swap! atau assoc :res nil :waiting false)
     (or res 0)))
 
 ;; Should return addr on success and -1 on failure
 ;; Truncate to max_length
 (defn readline [mem prompt addr max-length]
-  (when-let [line (read-line #_ (get-string mem prompt))]
-    (put-string mem addr (or line 0) max-length)))
+  (when-not (on-screen?)
+    (when-let [line (read-line-sync #_ (get-string mem prompt))]
+      (put-string mem addr line max-length))))
 
 ;;; file reading not yet tested
-(def fs {})
+(def fs (atom {}))
+
+(defn load-mal-files []
+  (swap! fs assoc
+    ; "./core.mal" mal/core
+    ; "./env.mal" mal/env
+    "./mal.mal" mal/mal))
+
+(load-mal-files)
 
 (defn read-file-sync [an-fs path encoding]
   (get an-fs path))
 
 (defn read-file [mem path-addr buf]
+  ;(println "attempting to read file")
   (let [path (get-string mem path-addr)
-        contents (read-file-sync fs path "utf8")]
+        contents (read-file-sync @fs path "utf8")]
+    (println :reading-file path)
+    ;(println :got-contents contents)
     (put-string mem buf contents nil)))
 
 (defn get-time-ms []
@@ -155,6 +165,7 @@
         res (-> instance .-exports (._main argc argv))]
     (println :res res)
     res))
+
 
 (defn load-wam [filenames args]
   (let [atau (tau {:waiting false :res nil})
@@ -189,7 +200,16 @@
         (->> % .-instance
           (conj [(count args) 0])
           (swap! files assoc :main))
-        (run)))))
+        (when-not (on-screen?)
+          (try
+            (run)
+            (catch js/Error e
+              (do (println "rebooting...")
+                (load-wam filenames args)
+                (throw e))))))
+
+      #(do (println "something bad happened")
+         (println :error %)))))
 
 (defn compile []
   (load-files)
@@ -204,13 +224,14 @@
              "env.wam"
              "core.wam"
              "setpA_mal.wam"]
-            [])
+            ["./mal.mal"])
   (println :mal-compiled!))
 
 (when (on-screen?)
   (on t (compile)))
 
 (defn write-line [aline]
-  (if (-> @@tau-container :waiting)
-    (do (swap! @tau-container assoc :res aline) nil)
-    (println :not-listening)))
+  (when (on-screen?)
+    (if (-> @@tau-container :waiting)
+      (do (swap! @tau-container assoc :res aline) nil)
+      (println :not-listening))))

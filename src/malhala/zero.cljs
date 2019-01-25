@@ -1,10 +1,5 @@
 (ns malhala.zero)
 
-(def x "x")
-
-(def y "y")
-
-
 (def platform-os
   "(module $platform_os
 
@@ -31,7 +26,7 @@
 
   (func $readline (param $prompt i32 $buf i32) (result i32)
     ;; TODO: don't hardcode count to 200
-    (LET $res ($lib_readline $prompt $buf 200))
+    (LET $res ($lib_readline $prompt $buf 20000))
     $res
   )
 

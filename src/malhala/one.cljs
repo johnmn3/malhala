@@ -419,6 +419,20 @@
 
 )")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (def mem
   "(module $mem
   (global $MEM_SIZE               i32 1048576)
@@ -885,6 +899,19 @@
                     (i32.sub (global.get $string_mem_next) $size))))
   )
 )")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 (def debug
   "(module $debug

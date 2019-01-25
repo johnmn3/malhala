@@ -333,7 +333,7 @@
          $ftype 0 $f_args 0 $f 0 $args 0
          $a0 0 $a0sym 0 $a1 0 $a2 0
          $err 0)
-
+    ;;($PR_MEMORY_SUMMARY_SMALL)
     (block $EVAL_return
     (loop $TCO_loop
 
@@ -347,7 +347,7 @@
         (br $EVAL_return)))
 
     ;;($PR_VALUE \">>> EVAL ast: '%s'\\n\" $ast)
-
+    ;;($PR_MEMORY_SUMMARY_SMALL)
     (if (i32.ne ($TYPE $ast) (global.get $LIST_T))
       (then
         (local.set $res ($EVAL_AST $ast $env 0))
@@ -657,12 +657,13 @@
          $i 0 $ret 0 $empty 0 $current 0 $val2 0)
 
     ;; DEBUG
-;;    ($printf_1 \"argc: 0x%x\\n\" $argc)
-;;    ($printf_1 \"memoryBase: 0x%x\\n\" (global.get $memoryBase))
-;;    ($printf_1 \"heap_start: 0x%x\\n\" (global.get $heap_start))
-;;    ($printf_1 \"heap_end: 0x%x\\n\" (global.get $heap_end))
-;;    ($printf_1 \"mem: 0x%x\\n\" (global.get $mem))
-;;    ($printf_1 \"string_mem: %d\\n\" (global.get $string_mem))
+    ;; ($printf_1 \"called $main\" 1)
+    ;; ($printf_1 \"argc: 0x%x\\n\" $argc)
+    ;; ($printf_1 \"memoryBase: 0x%x\\n\" (global.get $memoryBase))
+    ;; ($printf_1 \"heap_start: 0x%x\\n\" (global.get $heap_start))
+    ;; ($printf_1 \"heap_end: 0x%x\\n\" (global.get $heap_end))
+    ;; ($printf_1 \"mem: 0x%x\\n\" (global.get $mem))
+    ;; ($printf_1 \"string_mem: %d\\n\" (global.get $string_mem))
 
     (global.set $repl_env ($ENV_NEW (global.get $NIL)))
     (local.set $repl_env (global.get $repl_env))
@@ -674,12 +675,12 @@
     ($checkpoint_user_memory)
 
     ;; core.mal: defined using the language itself
+    ($RELEASE ($RE \"(defmacro! cond (fn* (& xs) (if (> (count xs) 0) (list 'if (first xs) (if (> (count xs) 1) (nth xs 1) (throw \\\"odd number of forms to cond\\\")) (cons 'cond (rest (rest xs)))))))\" $repl_env))
     ($RELEASE ($RE \"(def! *host-language* \\\"WebAssembly\\\")\" $repl_env))
     ($RELEASE ($RE \"(def! not (fn* (a) (if a false true)))\" $repl_env))
-    ($RELEASE ($RE \"(def! load-file (fn* (f) (eval (read-string (str \\\"(do \\\" (slurp f) \\\")\\\")\" $repl_env))
-    ($RELEASE ($RE \"(defmacro! cond (fn* (& xs) (if (> (count xs) 0) (list 'if (first xs) (if (> (count xs) 1) (nth xs 1) (throw \\\"odd number of forms to cond\\\") (cons 'cond (rest (rest xs)))\" $repl_env))
+    ($RELEASE ($RE \"(def! load-file (fn* (f) (eval (read-string (str \\\"(do \\\" (slurp f) \\\")\\\")))))\" $repl_env))
     ($RELEASE ($RE \"(def! *gensym-counter* (atom 0))\" $repl_env))
-    ($RELEASE ($RE \"(def! gensym (fn* [] (symbol (str \\\"G__\\\" (swap! *gensym-counter* (fn* [x] (+ 1 x))))\" $repl_env))
+    ($RELEASE ($RE \"(def! gensym (fn* [] (symbol (str \\\"G__\\\" (swap! *gensym-counter* (fn* [x] (+ 1 x)))))))\" $repl_env))
     ($RELEASE ($RE \"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) (let* (c (gensym)) `(let* (~c ~(first xs)) (if ~c ~c (or ~@(rest xs)))))))))\" $repl_env))
 
     ;; Command line arguments
@@ -730,10 +731,11 @@
             (return 0)))))
 
     ($RELEASE ($RE \"(println (str \\\"Mal [\\\" *host-language* \\\"\\\")\" $repl_env))
-
+    ($printf_1 \"Starting Repl\" 1)
     ;; Start REPL
     (block $repl_done
       (loop $repl_loop
+        ;;($printf_1 \"Running Repl\" 1)
         (br_if $repl_done (i32.eqz ($readline \"user> \" $line)))
         (br_if $repl_loop (i32.eq (i32.load8_u $line) 0))
         (local.set $res ($REP $line $repl_env))
