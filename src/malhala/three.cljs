@@ -1,7 +1,11 @@
 (ns malhala.three)
 
 (def core
-  "(module $core
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $core
 
 
   ;; it would be nice to have this in types.wam but it uses

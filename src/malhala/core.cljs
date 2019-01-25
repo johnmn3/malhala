@@ -1,3 +1,7 @@
+;; derived mostly from https://github.com/kanaka/mal/blob/master/wasm/run.js
+;; Copyright Joel Martin
+;; License MIT
+
 (ns malhala.core
   (:require
    [malhala.zero :as zero]

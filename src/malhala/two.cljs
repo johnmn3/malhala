@@ -1,7 +1,11 @@
 (ns malhala.two)
 
 (def mal-env
-  "(module $env
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $env
 
   (func $ENV_NEW (param $outer i32) (result i32)
     (LET $data ($HASHMAP) ;; allocate the data hashmap

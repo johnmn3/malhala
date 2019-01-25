@@ -1,5 +1,8 @@
 (ns malhala.mal)
 
+;; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
 
 (def _fn?
   '(def! _fn?

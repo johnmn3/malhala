@@ -1,7 +1,11 @@
 (ns malhala.zero)
 
 (def platform-os
-  "(module $platform_os
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $platform_os
 
   (import \"env\" \"exit\"        (func $lib_exit (param i32)))
   (import \"env\" \"stdout\"      (global $lib_stdout i32))
@@ -48,7 +52,11 @@
 )")
 
 (def string
-  "(module $string
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $string
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -263,7 +271,11 @@
 )")
 
 (def printf
-  "(module $printf
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $printf
 
   (global $printf_buf (mut i32) 0)
 

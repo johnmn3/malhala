@@ -1,7 +1,11 @@
 (ns malhala.one)
 
 (def types
-  ";; Mal value memory layout
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+;; Mal value memory layout
 ;;   type           words
 ;;   ----------     ----------
 ;;   nil            ref/ 0 |  0           |               |
@@ -416,25 +420,14 @@
   (func $MALFUNC (param $ast i32 $params i32 $env i32) (result i32)
     ($ALLOC (global.get $MALFUNC_T) $ast $params $env)
   )
-
 )")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 (def mem
-  "(module $mem
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $mem
   (global $MEM_SIZE               i32 1048576)
   (global $STRING_MEM_SIZE        i32 1048576)
 
@@ -900,21 +893,12 @@
   )
 )")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 (def debug
-  "(module $debug
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $debug
 
   (func $checkpoint_user_memory
     (global.set $mem_user_start (global.get $mem_unused_start))
@@ -1201,7 +1185,11 @@
 )")
 
 (def reader
-  "(module $reader
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $reader
 
   ;; TODO: global warning
   (global $token_buf   (mut i32) 0)
@@ -1516,7 +1504,11 @@
 
 
 (def printer
-  "(module $printer
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $printer
 
   (global $printer_buf   (mut i32) 0)
 

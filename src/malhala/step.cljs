@@ -1,7 +1,11 @@
 (ns malhala.step)
 
 (def repl0
-  "(module $step0_repl
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $step0_repl
 
   ;; READ
   (func $READ (param $str i32) (result i32)
@@ -49,7 +53,11 @@
 )")
 
 (def repl1
-  "(module $step1_read_print
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $step1_read_print
 
   ;; READ
   (func $READ (param $str i32) (result i32)
@@ -135,7 +143,11 @@
 ")
 
 (def stepA-mal
-  "(module $stepA_mal
+  ";; Copyright Joel Martin <github@martintribe.org>
+;; Licensed under MPL-2.0 (see ./LICENSE)
+;; https://github.com/kanaka/wam
+
+(module $stepA_mal
 
   (global $repl_env (mut i32) (i32.const 0))
 
